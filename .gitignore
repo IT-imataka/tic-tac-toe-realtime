@@ -1,0 +1,20 @@
+# ルートの .gitignore
+# Next.jsやNode.jsプロジェクト全体の無視設定
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js specific
+.next/
+/out/
+/dist/
+/build/
+
+# IDE/OS files
+.DS_Store
+.vscode/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
