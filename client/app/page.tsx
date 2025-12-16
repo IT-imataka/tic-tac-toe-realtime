@@ -9,11 +9,11 @@ import { io,Socket } from 'socket.io-client';
 // let socket : Socket; // コンポーネントの外で定義する (再レンダリング対策の簡易版)
 
 export default function Home() {
-  const [message, set_Message] = useState<string>("");
-  const [socket,setSocket] = useState<Socket | null> (null);
+  // const [message, set_Message] = useState<string>("");
+  // const [socket,setSocket] = useState<Socket | null> (null);
 
   // 盤面の定義(9個の配列)
-  // const [borad,setBorad] = useState<(string | null[])>(Array(9).fill(null));
+  const [borad,setBorad] = useState<(string | null[])>(Array(9).fill(null));
 
   useEffect(() => {
     // 1. サーバー(3001番)に接続！
