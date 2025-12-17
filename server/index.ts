@@ -2,7 +2,6 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import { Socket } from "net";
 
 const app = express();
 app.use(cors());
@@ -29,21 +28,27 @@ io.on("connection", (socket) => {
 
   // クライアントからの置きたいマス目の指示を受け取る
   socket.on("place_mark", (index: number) => {
+    console.log(borad);
     console.log("受け取った");
     // 既にある場所には置けないように
     if (borad[index] !== null) return;
 
+    console.log(isPlayerturn);
     // 盤面を更新
-    borad[index] = isPlayerturn ? "〇" : "×";
+    borad[index] = isPlayerturn ? "○" : "×";
 
     // ターン交代
     isPlayerturn = !isPlayerturn;
 
     // 全員に盤面変更の放送
-    io.emit("update_borad", borad);
+    io.emit("update_board", borad);
+    // if (borad[index]) {
+    //   // console.log(borad.length);
+    //   borad = [];
+    // }
 
     // 切断処理
-    socket.on("disconnected", () => {
+    socket.on("disconneted", () => {
       console.log("✖:ユーザーが切断:", socket.id);
     });
   });

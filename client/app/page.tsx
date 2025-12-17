@@ -19,10 +19,12 @@ export default function Home() {
 
     const newsocket = io('http://localhost:3001');
     socket = newsocket;
+    // console.log(socket);
 
     // 2. 盤面の更新が来たらStateを変更
     newsocket.on('update_board', (newBoard) => {
-      setBorad(newBoard);
+      console.log("★クライアントにデータが届いた瞬間！",newBoard);
+      setBorad([...newBoard]);
     });
 
     // サーバから返事が来たら画面の文字を更新する
@@ -34,6 +36,7 @@ export default function Home() {
 
     // 3. お片付け（画面を閉じた時などに切断）
     return () => {
+      newsocket.off("update_board");
       newsocket.disconnect();
     };
   }, []); // [] は「最初の1回だけ実行」という意味
