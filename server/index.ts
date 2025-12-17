@@ -9,7 +9,7 @@ app.use(cors());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "http:}//localhost:3000/", methods: ["GET", "POST"] },
+  cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
 
 // ゲームの状態を定義(9つ)
@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
 
   // クライアントからの置きたいマス目の指示を受け取る
   socket.on("place_mark", (index: number) => {
+    console.log("受け取った");
     // 既にある場所には置けないように
     if (borad[index] !== null) return;
 
