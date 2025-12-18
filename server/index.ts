@@ -15,7 +15,7 @@ const io = new Server(server, {
 // null = なし,'〇' = まる,'×' = ばつ
 
 // 最初はnullを入れる
-let borad = Array(9).fill(null);
+let board = Array(9).fill(null);
 
 // ターン判定 turn ：まる,false : ばつ
 let isPlayerturn = true;
@@ -24,28 +24,40 @@ io.on("connection", (socket) => {
   console.log("✅ユーザーが接続", socket.id);
 
   // 接続ユーザーに盤面状況の共有
-  socket.emit("update_board", borad);
+  socket.emit("update_board", board);
 
   // クライアントからの置きたいマス目の指示を受け取る
   socket.on("place_mark", (index: number) => {
-    console.log(borad);
+    // console.log(board);
     console.log("受け取った");
     // 既にある場所には置けないように
-    if (borad[index] !== null) return;
+    if (board[index] !== null) return;
 
     console.log(isPlayerturn);
     // 盤面を更新
-    borad[index] = isPlayerturn ? "○" : "×";
+    board[index] = isPlayerturn ? "○" : "×";
 
     // ターン交代
     isPlayerturn = !isPlayerturn;
 
     // 全員に盤面変更の放送
-    io.emit("update_board", borad);
-    // if (borad[index]) {
-    //   // console.log(borad.length);
-    //   borad = [];
+    io.emit("update_board", board);
+    // if (board[index]) {
+    //   // console.log(board.length);
+    //   board = [];
     // }
+    // 1行目
+    for (let i = 0; i < 3; i++) {
+      if (board[i] != null) {
+        console.log(board);
+        // 1列目
+        for (let j = 0; j < 3; j++) {
+          if (board[i] == board[j]) {
+            board = [];
+          }
+        }
+      }
+    }
 
     // 切断処理
     socket.on("disconneted", () => {
@@ -57,9 +69,9 @@ io.on("connection", (socket) => {
 // デバック処理
 // 再起動無しで盤面をリセットしたい場合
 io.on("reset_game", () => {
-  borad = Array(9).fill(null);
+  board = Array(9).fill(null);
   isPlayerturn = true;
-  io.emit("update_borad", borad);
+  io.emit("update_board", board);
 });
 
 const PORT = 3001;
