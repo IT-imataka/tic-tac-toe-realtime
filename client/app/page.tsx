@@ -12,7 +12,7 @@ export default function Home() {
   // const [socket,setSocket] = useState<Socket | null> (null);
 
   // 盤面の定義(9個の配列)
-  const [borad,setBorad] = useState<(string | null)[]>(Array(9).fill(null));
+  const [board,setboard] = useState<(string | null)[]>(Array(9).fill(null));
 
   useEffect(() => {
     // 1. サーバー(3001番)に接続！
@@ -24,7 +24,7 @@ export default function Home() {
     // 2. 盤面の更新が来たらStateを変更
     newsocket.on('update_board', (newBoard) => {
       console.log("★クライアントにデータが届いた瞬間！",newBoard);
-      setBorad(newBoard);
+      setboard(newBoard);
     });
 
     // サーバから返事が来たら画面の文字を更新する
@@ -55,7 +55,7 @@ export default function Home() {
       <h1 className="text-4xl font-bold mb-8 text-gray-800">〇✖ゲーム</h1>
       {/* グリッドの生成 */}
       <div className="grid grid-cols-3 gap-2 bg-gray-800 p-2 rounded-l">
-        {borad.map((cel,index) => (
+        {board.map((cel,index) => (
           <button 
           className="w-24 h-24 bg-white text-5xl font-bold flex items-center justify-center hover:bg-gray-200 transition"
           key={index}

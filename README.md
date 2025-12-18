@@ -17,6 +17,8 @@ bun dev
 ## 消える三目並べ
 youtube shortsでみたゲーム機をブラウザで実現するために開発しています。
 
+一定時間経過後に自分の置いたマスが消えていく仕様のため、ただの○×ゲームに読み合いという心理戦を挟むことを目指します。
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
