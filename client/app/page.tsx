@@ -23,7 +23,7 @@ export default function Home() {
 
     // 2. 盤面の更新が来たらStateを変更
     newsocket.on('update_board', (newBoard) => {
-      console.log("★クライアントにデータが届いた瞬間！",newBoard);
+      // console.log("★クライアントにデータが届いた瞬間！",newBoard);
       setboard(newBoard);
     });
 

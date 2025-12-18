@@ -28,6 +28,27 @@ io.on("connection", (socket) => {
 
   // クライアントからの置きたいマス目の指示を受け取る
   socket.on("place_mark", (index: number) => {
+    const winnermap = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ] as const;
+
+    const checkWinner = () => {
+      for (const pattern of winnermap) {
+        const [a, b, c] = pattern;
+        // マス目がすべて同じかつ、空でない場合
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return board[a];
+        }
+      }
+      return null;
+    };
     // console.log(board);
     console.log("受け取った");
     // 既にある場所には置けないように
@@ -36,28 +57,31 @@ io.on("connection", (socket) => {
     console.log(isPlayerturn);
     // 盤面を更新
     board[index] = isPlayerturn ? "○" : "×";
+    const winner = checkWinner();
+    if (winner) {
+      console.log(`商社決定:${winner}`);
+    }
 
     // ターン交代
     isPlayerturn = !isPlayerturn;
 
     // 全員に盤面変更の放送
     io.emit("update_board", board);
-    // if (board[index]) {
-    //   // console.log(board.length);
-    //   board = [];
-    // }
+
+    // 以下は趣味嗜好のため時間ができたら
+    // 配列の添え字を取得して縦横斜めの差が一定の時を検知する
+    // const rowjudge = (index: number) => {
+    //   console.log(board.indexOf(index));
+    // };
+
     // 1行目
-    for (let i = 0; i < 3; i++) {
-      if (board[i] != null) {
-        console.log(board);
-        // 1列目
-        for (let j = 0; j < 3; j++) {
-          if (board[i] == board[j]) {
-            board = [];
-          }
-        }
-      }
-    }
+    // for (let i = 0; i < 3; i++) {
+    //   // console.log(board);
+    //   // 1列目
+    //   for (let j = 0; j < 3; j++) {
+    //     console.log(board[i]);
+    //   }
+    // }
 
     // 切断処理
     socket.on("disconneted", () => {
