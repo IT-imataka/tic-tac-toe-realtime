@@ -19,15 +19,28 @@ let board = Array(9).fill(null);
 
 // ターン判定 turn ：まる,false : ばつ
 let isPlayerturn = true;
+let isXNext = true;
+
+// 勝者
+let winner: string | null = null;
+
+// 履歴を保存
+let xMoves: number[] = [];
+let oMoves: number[] = [];
 
 io.on("connection", (socket) => {
   console.log("✅ユーザーが接続", socket.id);
 
   // 接続ユーザーに盤面状況の共有
-  socket.emit("update_board", board);
+  socket.emit("update_board", { board, winner });
 
   // クライアントからの置きたいマス目の指示を受け取る
   socket.on("place_mark", (index: number) => {
+    // すでに勝者がいる場合や盤面が埋まっている場合はなら早期リターン
+    if (winner || board[index]) return;
+    const currentPlayer = isXNext ? "○" : "×";
+    const currentMoves = isXNext ? oMoves : xMoves;
+
     const winnermap = [
       [0, 1, 2],
       [3, 4, 5],
@@ -39,7 +52,7 @@ io.on("connection", (socket) => {
       [2, 4, 6],
     ] as const;
 
-    const checkWinner = () => {
+    const checkWinner = (ele: (string | null)[]) => {
       for (const pattern of winnermap) {
         const [a, b, c] = pattern;
         // マス目がすべて同じかつ、空でない場合
@@ -49,53 +62,67 @@ io.on("connection", (socket) => {
       }
       return null;
     };
-    // console.log(board);
-    console.log("受け取った");
+    // console.log(board[index]);
     // 既にある場所には置けないように
     if (board[index] !== null) return;
 
-    console.log(isPlayerturn);
+    // console.log(isPlayerturn);
     // 盤面を更新
-    board[index] = isPlayerturn ? "○" : "×";
-    const winner = checkWinner();
-    if (winner) {
-      console.log(`商社決定:${winner}`);
+    // board[index] = isPlayerturn ? "○" : "×";
+
+    // 盤面の更新と履歴の保存
+    board[index] = currentPlayer;
+    currentMoves.push(index);
+    console.log("確認用：", currentMoves.push(index));
+    console.log("currentMoves：", currentMoves);
+    // 保存されたマークの履歴が4つ以上になった時
+
+    console.log(`--- ターン開始 ---`);
+    console.log(`置いた人: ${isXNext ? "O" : "X"}, 場所: ${index}`);
+    console.log(`Xの履歴: [${xMoves}], Oの履歴: [${oMoves}]`);
+    if (currentMoves.length > 3) {
+      // 一番古いマークから削除
+      const oldIndex = currentMoves.shift();
+      // undefinedじゃなかったら削除する
+      if (oldIndex !== undefined) {
+        board[oldIndex] = null;
+      }
     }
 
+    // console.log("ボード：", board);
+    // console.log("ボードの添え字", board[index]);
+    // 勝者の判定
+    winner = checkWinner(board);
+
+    if (winner) {
+      console.log(`勝者決定:${winner}`);
+    }
     // ターン交代
-    isPlayerturn = !isPlayerturn;
+    isXNext = !isXNext;
 
     // 全員に盤面変更の放送
-    io.emit("update_board", board);
+    io.emit("update_board", { board, winner });
 
-    // 以下は趣味嗜好のため時間ができたら
-    // 配列の添え字を取得して縦横斜めの差が一定の時を検知する
-    // const rowjudge = (index: number) => {
-    //   console.log(board.indexOf(index));
-    // };
+    socket.on("reset_board", () => {
+      console.log("ボタンを受信しました");
+      // 勝敗判定後の情報リセット (board,winner)
+      board = Array(9).fill(null);
+      winner = null;
+      isPlayerturn = true;
+      isXNext = true;
+      // 履歴もリセット
+      xMoves = [];
+      oMoves = [];
 
-    // 1行目
-    // for (let i = 0; i < 3; i++) {
-    //   // console.log(board);
-    //   // 1列目
-    //   for (let j = 0; j < 3; j++) {
-    //     console.log(board[i]);
-    //   }
-    // }
-
-    // 切断処理
-    socket.on("disconneted", () => {
-      console.log("✖:ユーザーが切断:", socket.id);
+      // 最後に全員に通知
+      io.emit("update_board", { board, winner });
     });
   });
-});
 
-// デバック処理
-// 再起動無しで盤面をリセットしたい場合
-io.on("reset_game", () => {
-  board = Array(9).fill(null);
-  isPlayerturn = true;
-  io.emit("update_board", board);
+  // 切断処理
+  socket.on("disconneted", () => {
+    console.log("✖:ユーザーが切断:", socket.id);
+  });
 });
 
 const PORT = 3001;

@@ -12,7 +12,8 @@ export default function Home() {
   // const [socket,setSocket] = useState<Socket | null> (null);
 
   // 盤面の定義(9個の配列)
-  const [board,setboard] = useState<(string | null)[]>(Array(9).fill(null));
+  const [board,setBoard] = useState<(string | null)[]>(Array(9).fill(null));
+  const [winner,setWinner] = useState<string | null>(null);
 
   useEffect(() => {
     // 1. サーバー(3001番)に接続！
@@ -22,17 +23,14 @@ export default function Home() {
     // console.log(socket);
 
     // 2. 盤面の更新が来たらStateを変更
-    newsocket.on('update_board', (newBoard) => {
-      // console.log("★クライアントにデータが届いた瞬間！",newBoard);
-      setboard(newBoard);
+    // フロント側で勝敗の更新情報を受け取り勝者を表示させる
+    newsocket.on('update_board', (data) => {
+      // console.log(data);
+      // サーバーからwinner,boardというオブジェクトが届く
+      setBoard(data.board);
+      setWinner(data.winner);
     });
-
-    // サーバから返事が来たら画面の文字を更新する
-    // newsocket.on('reply_message',(data) => {
-    //   console.log("サーバから返事が来ました！",data);
-    //   set_Message(data);
-    // })
-    // setSocket(newsocket);
+  
 
     // 3. お片付け（画面を閉じた時などに切断）
     return () => {
@@ -48,11 +46,19 @@ export default function Home() {
       socket.emit("place_mark", index)
     }
   };
+  const handleRiset = () => {
+    console.log("リセットボタンが押されました");
+    if(socket){
+      socket.emit("reset_board");
+    }
+  }
   
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
       <h1 className="text-4xl font-bold mb-8 text-gray-800">〇✖ゲーム</h1>
+      {winner && (
+        <h2 className='text-1xl font-bold text-red-500'>{winner === "○" ? "○" : "×"}の方が勝利です！おめでとうございます！</h2>
+        )}
       {/* グリッドの生成 */}
       <div className="grid grid-cols-3 gap-2 bg-gray-800 p-2 rounded-l">
         {board.map((cel,index) => (
@@ -67,6 +73,7 @@ export default function Home() {
         ))}
       </div>
       <p className="mt-4 text-gray-600">くりっくして交互に配置</p>
+      <button onClick={handleRiset} className="text-1xl font-bold text-red-500">リセットボタン</button>
     </div>
   );
 }
