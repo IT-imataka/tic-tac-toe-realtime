@@ -73,8 +73,8 @@ io.on("connection", (socket) => {
     // 盤面の更新と履歴の保存
     board[index] = currentPlayer;
     currentMoves.push(index);
-    console.log("確認用：", currentMoves.push(index));
-    console.log("currentMoves：", currentMoves);
+    // console.log("確認用：", currentMoves.push(index));
+    // console.log("currentMoves：", currentMoves);
     // 保存されたマークの履歴が4つ以上になった時
 
     console.log(`--- ターン開始 ---`);
@@ -99,9 +99,17 @@ io.on("connection", (socket) => {
     }
     // ターン交代
     isXNext = !isXNext;
+    const nextInv: number[] = [];
+
+    if (xMoves.length >= 3 && xMoves[0] !== undefined) {
+      nextInv.push(xMoves[0]);
+    }
+    if (oMoves.length >= 3 && oMoves[0] !== undefined) {
+      nextInv.push(oMoves[0]);
+    }
 
     // 全員に盤面変更の放送
-    io.emit("update_board", { board, winner });
+    io.emit("update_board", { board, winner, nextInv });
 
     socket.on("reset_board", () => {
       console.log("ボタンを受信しました");
@@ -114,8 +122,13 @@ io.on("connection", (socket) => {
       xMoves = [];
       oMoves = [];
 
+      console.log("送出データ:", { nextInv });
       // 最後に全員に通知
-      io.emit("update_board", { board, winner });
+      io.emit("update_board", {
+        board,
+        winner,
+        nextInv,
+      });
     });
   });
 
