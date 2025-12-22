@@ -8,7 +8,13 @@ app.use(cors());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "https://tic-tac-toe-client-brp5.onrender.com/",
+    ],
+    methods: ["GET", "POST"],
+  },
 });
 
 // ゲームの状態を定義(9つ)
