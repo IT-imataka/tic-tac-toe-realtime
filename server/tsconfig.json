@@ -7,9 +7,18 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
+    "module": "commonjs",
+    "target": "es2016",
     "types": [],
+
+    // 出力先設定
+    // serverフォルダ自体の読み込み
+    "rootDir": "./",
+    // 翻訳結果をdistフォルダに出力
+    "outDir": "./dist",
+
+    "esModuleInterop": true,
+    " forceConsistentCasingInFileNames": true,
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
