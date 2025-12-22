@@ -42,7 +42,7 @@ export default function Home() {
   useEffect(() => {
     // 1. サーバー(3001番)に接続！
 
-    const newsocket = io('process.env.NEXT_PUBLIC_API_URL || http://localhost:3001');
+    const newsocket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
     // const newsocket = io('http://localhost:3001');
     socket = newsocket;
     // console.log(socket);
