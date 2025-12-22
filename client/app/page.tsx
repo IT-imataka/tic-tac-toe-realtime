@@ -6,7 +6,7 @@ import { useEffect,useState } from 'react';
 import { io,Socket } from 'socket.io-client';
 
 let socket : Socket; // コンポーネントの外で定義する (再レンダリング対策の簡易版)
-export function GlowingCard({ children, className = "" }) {
+export function GlowingCard({ children, className = "" } :{ chirldren: React.ReactNode; className? :string}) {
   return (
     // 1. 外側のラッパー（ここが虹色に光る）
     <div className="relative group rounded-xl p-[2.5px] overflow-hidden ">
