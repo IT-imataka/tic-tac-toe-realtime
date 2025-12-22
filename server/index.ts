@@ -11,7 +11,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://tic-tac-toe-client-brp5.onrender.com/",
+      "https://tic-tac-toe-client-brp5.onrender.com",
     ],
     methods: ["GET", "POST"],
   },
