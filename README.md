@@ -89,14 +89,13 @@ $ npm run dev
 
 ## 💡 工夫した点・苦労した点
 
-- 今回はリアルタイム対戦ということでマークを置いた時に即座に伝えたいと思い、websocketを用いました。
+- **リアルタイム通信**：今回はリアルタイム対戦ということでマークを置いた時に即座に伝えたいと思い、WebSocketを用いました。
   
-- フロントエンドにReactベースのNext.jsを用いることで、マス目の状態をStateとして保存し、クライアント、サーバー間で疎結合なアーキテクチャを目指しました。
+- **アーキテクチャ**：フロントエンドにReactベースのNext.jsを用いることで、マス目の状態をStateとして保存し、クライアント・サーバー間で疎結合な構成を目指しました。
   
-- バックエンドも含めたポートフォリオは初めてだったので、corsなどの設定や、ビルド時の設定に苦労しました。
+- **デプロイ**：バックエンドも含めたポートフォリオは初めてだったので、corsなどの設定や、ビルド時の設定に苦労しました。
   
 - さらにオリジナリティな部分として、一定個数以上はマークが消えるというギミックを実装したため、その状態管理の考え方が難しく、geminiと撃ち合いました。
-
 <a id ="en"></a>
 # 🌐 English_description
 
@@ -186,12 +185,12 @@ $ npm run dev
 ## 💡 Key Innovations and Challenges
 
 
-- For real-time multiplayer gameplay, I implemented WebSockets to ensure marks are communicated instantly upon placement.
-  
-- By using React-based Next.js for the frontend, I stored grid state as a shared state, aiming for a loosely coupled architecture between client and server.
+- **Real-time Communication**: Since this was a real-time multiplayer game, I wanted to transmit marker placement instantly, so I used WebSockets.
 
-- Since this was my first portfolio project encompassing the backend, I struggled with configurations like CORS and build settings.
-  
-- As an original feature, I implemented a mechanic where marks disappear once a certain number is reached. Managing this state proved challenging, and I battled with Gemini to get it right.
+- **Architecture**: By using React-based Next.js for the frontend, I aimed for a loosely coupled structure between client and server by storing the grid state as State.
+
+- **Deployment**: Since this was my first portfolio project including the backend, I struggled with settings like CORS and build configuration.
+
+- As an additional original feature, I implemented a mechanic where marks disappear once a certain number is reached. Managing this state proved challenging, and I battled with Gemini.
 
 <div align="right"><a href ="#jp">Back to top👆</a></div>
