@@ -1,37 +1,197 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 消える○×ゲーム（Vanishing Tic-Tac-Toe）
 
-## Getting Started
+<div align="center"><a href="#en">🇺🇸 English Description</a></div>
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+<a id ="jp"></a>
+
+![License](https://img.shields.io/badge/license-MIT-blue)
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+
+![license](https://img.shields.io/badge/TypeScript-5-blue)
+
+![license](https://img.shields.io/badge/Socket.io-Realtime-green)
+
+## 🚀 デモ (demo)
+
+**実際に遊べます！！下記をクリックしてください**👇
+
+[https://tic-tac-toe-client-brp5.onrender.com](https://tic-tac-toe-client-brp5.onrender.com/)
+
+※ PC,スマホ、ブラウザでも別タブ同士で対戦が可能です
+
+## 📷 スクリーンショット
+
+![Game demo ](./images/images.png)
+
+
+Youtube shortsで見かけた「時間が経つと自動で消える〇×ゲーム」のゲーム機を
+ブラウザ上で再現したリアルタイム対戦ゲームです。
+通常の〇×ゲームに消失要素を加えることで、読み合いも必要になる心理戦の要素を取り入れました。
+
+## 🎮 ゲームのルール  (Features)
+
+-  **最大コマ数**：3コマです。それ以上のコマを置くことはできません。
+-  **消失ギミック**：4コマ目を置いた時点で一番最初に置いた自分のコマが自動で消えます。
+-  **リアルタイム対戦**：リンクを送れば送った相手と対戦可能です。(1人で動作確認をしたい場合は別タブで開くことで対戦の再現が可能です)
+- **勝敗条件**：縦、横、斜めに自分のコマを3つ並べた時点で勝利としています。
+
+## 🛠️ 技術スタック  (Tech Stack)
+
+- **Frontend**：Next.js,  TypeScript,  Tailwind css
+- **Backend** ：Express.js,Node.js
+- **Realtime**：Socket.io(双方向通信)
+- **Deployment**：Render.com
+
+## 🚪 開発環境のセットアップ  (Local Setup)
+
+下記は手元で動かすための手順です。
+### 1. リポジトリのクローン
+
+```
+bash
+
+$ git clone https://github.com/IT-imataka/tic-tac-toe-realtime.git
+$ cd tic-tac-toe-realtime
 ```
 
-## 消える三目並べ
-youtube shortsでみたゲーム機をブラウザで実現するために開発しています。
+### 2. バックエンドの起動
 
-一定時間経過後に自分の置いたマスが消えていく仕様のため、ただの○×ゲームに読み合いという心理戦を挟むことを目指します。
+```
+bash
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+$ cd server
+$ npm install
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 開発モードで起動
+$ npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. フロントエンドの起動
 
-## Learn More
+*ターミナルウィンドウを分けて実行してください*
 
-To learn more about Next.js, take a look at the following resources:
+```
+bash
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+$ cd client
+$ npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 環境変数の設定
+# .env.localファイルを作成して、下記を記載
+NEXT_PUBLIC_API_URL = http://localhost:3001
+
+$ npm run dev
+```
 
 
+## 💡 工夫した点・苦労した点
+
+- 今回はリアルタイム対戦ということでマークを置いた時に即座に伝えたいと思い、websocketを用いました。
+  
+- フロントエンドにReactベースのNext.jsを用いることで、マス目の状態をStateとして保存し、クライアント、サーバー間で疎結合なアーキテクチャを目指しました。
+  
+- バックエンドも含めたポートフォリオは初めてだったので、corsなどの設定や、ビルド時の設定に苦労しました。
+  
+- さらにオリジナリティな部分として、一定個数以上はマークが消えるというギミックを実装したため、その状態管理の考え方が難しく、geminiと撃ち合いました。
+
+<a id ="en"></a>
+# 🌐 English_description
+
+# Vanishing Tic-Tac-Toe
+
+
+![License](https://img.shields.io/badge/license-MIT-blue)
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+
+![license](https://img.shields.io/badge/TypeScript-5-blue)
+
+![license](https://img.shields.io/badge/Socket.io-Realtime-green)
+
+## 🚀 Demo
+
+**Play it now!! Click below**👇
+
+[https://tic-tac-toe-client-brp5.onrender.com](https://tic-tac-toe-client-brp5.onrender.com/)
+
+※ You can play against others on PC, smartphone, or browser using separate tabs
+
+## 📷 Screenshot
+
+![Game demo ](./images/images.png)
+
+
+This is a real-time multiplayer game recreating the “Tic-Tac-Toe that automatically disappears over time” game console seen on YouTube Shorts, now playable in your browser.
+By adding a disappearing element to classic Tic-Tac-Toe, it incorporates psychological warfare where reading your opponent becomes crucial.
+
+## 🎮 Game Rules (Features)
+
+-  **Maximum Pieces**: 3 pieces. You cannot place more than 3 pieces.
+-  **Disappearance Mechanism**: Placing the fourth piece automatically erases your very first piece.
+-  **Real-Time Multiplayer**: Send a link to play against anyone. (To test alone, open in a separate tab to simulate a match.)
+-  **Win Condition**: Win by aligning three of your pieces vertically, horizontally, or diagonally.
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js, TypeScript, Tailwind CSS
+- **Backend**: Express.js, Node.js
+- **Realtime**: Socket.io (bidirectional communication)
+- **Deployment**: Render.com
+
+## 🚪 Local Setup
+
+Below are the steps to run the project locally.
+### 1. Clone the Repository
+
+```
+bash
+
+$ git clone https://github.com/IT-imataka/tic-tac-toe-realtime.git
+$ cd tic-tac-toe-realtime
+```
+
+### 2. Start the Backend
+
+```
+bash
+
+$ cd server
+$ npm install
+
+# Start in development mode
+$ npm run dev
+```
+
+### 3. Start the Frontend
+
+*Please run this in a separate terminal window*
+
+```
+bash
+
+$ cd client
+$ npm install
+
+# Set environment variables
+# Create a .env.local file and add the following:
+NEXT_PUBLIC_API_URL = http://localhost:3001
+
+$ npm run dev
+```
+
+
+## 💡 Key Innovations and Challenges
+
+
+- For real-time multiplayer gameplay, I implemented WebSockets to ensure marks are communicated instantly upon placement.
+  
+- By using React-based Next.js for the frontend, I stored grid state as a shared state, aiming for a loosely coupled architecture between client and server.
+
+- Since this was my first portfolio project encompassing the backend, I struggled with configurations like CORS and build settings.
+  
+- As an original feature, I implemented a mechanic where marks disappear once a certain number is reached. Managing this state proved challenging, and I battled with Gemini to get it right.
+
+<div align="right"><a href ="#jp">Back to top👆</a></div>

@@ -5,7 +5,9 @@
 import { useEffect,useState } from 'react';
 import { io,Socket } from 'socket.io-client';
 
-let socket : Socket; // コンポーネントの外で定義する (再レンダリング対策の簡易版)
+// コンポーネントの外で定義する (再レンダリング対策の簡易版)
+let socket : Socket; 
+
 export function GlowingCard({ children, className = "" } :{ children: React.ReactNode; className? :string}) {
   return (
     // 1. 外側のラッパー（ここが虹色に光る）
@@ -90,7 +92,7 @@ export default function Home() {
       <div className="grid grid-cols-3 gap-2 bg-white-500 p-2 rounded-l ">
         {board.map((cel,index) => {
           const isNextInv = nextInv.includes(index);
-          console.log("生のnextInv:", nextInv)
+          // console.log("生のnextInv:", nextInv)
           // 以下はボタンを返すためのjsx
           return (  
             <div key={index} 
@@ -108,8 +110,8 @@ export default function Home() {
                 key={index}
                 onClick={() => handlcelClick(index)}>
                 {/* nullなら空文字　‘〇'なら〇 */}
-                {cel === '○' && <span className='text-blue-500 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]'>○</span>}
-                {cel === '×' && <span className='text-red-500 drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]'>×</span>}
+                {cel === '○' && <span className='text-cyan-300 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]'>○</span>}
+                {cel === '×' && <span className='text-pink-500 drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]'>×</span>}
                 </button>
               </div>
             </div>
