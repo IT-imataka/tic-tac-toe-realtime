@@ -66,7 +66,8 @@ export default function Home() {
       newsocket.off("update_board");
       newsocket.disconnect();
     };
-  }, []); // [] は「最初の1回だけ実行」という意味
+  }, []); 
+  // 空の依存配列で一度だけ実行
 
 // マスを押したときの処理
   const handlcelClick =  (index:number) => {
