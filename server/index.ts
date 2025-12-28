@@ -46,6 +46,7 @@ io.on("connection", (socket) => {
   // ユーザー接続時に部屋に通す玄関口の設定
   socket.on("join_room", (roomIDs: string) => {
     // ここにインターフェイスで定義した変数を初期化する
+    console.log(roomIDs);
     socket.join(roomIDs);
 
     // 部屋の登録情報がなければ作成、初期化した部屋オブジェクトは動的に変化するためブラケットで参照する
@@ -71,6 +72,7 @@ io.on("connection", (socket) => {
     socket.on("place_mark", (data: { index: number; roomID: string }) => {
       // 分割代入
       const { index, roomID } = data;
+      console.log(`place_mark：受信 index:${index} roomID:${roomID}`);
       // 部屋の有無の判定　あれば早期リターン　なければ作成
       const room = rooms[roomID];
       if (!room) return;
@@ -136,7 +138,7 @@ io.on("connection", (socket) => {
       room.winner = checkWinner(room.board);
 
       if (room) {
-        console.log(`勝者決定:${room}`);
+        console.log(`勝者決定:${room.winner}`);
       }
       // ターン交代
       room.isNext = !room.isNext;
@@ -157,25 +159,33 @@ io.on("connection", (socket) => {
         winner: room.winner,
         nextInv,
       });
-
-      socket.on("reset_board", () => {
-        console.log("ボタンを受信しました");
+    });
+    socket.on("reset_board", (roomID: string) => {
+      const room = rooms[roomID];
+      if (room) {
         // 勝敗判定後の情報リセット (board,winner)
         room.board = Array(9).fill(null);
         room.winner = null;
+
+        // ×に戻す
         room.isNext = true;
+
         // 履歴もリセット
         room.xMoves = [];
         room.oMoves = [];
 
-        console.log("送出データ:", { nextInv });
+        console.log("送出データ:", { nextInv: room.isNext });
         // 最後に全員に通知
         io.to(roomID).emit("update_board", {
           board: room.board,
           winner: room.winner,
-          nextInv,
+          nextInv: room.isNext,
         });
-      });
+      } else {
+        console.log(
+          `リセットできませんでした。部屋：${room}が見つかりません。`
+        );
+      }
     });
   });
 

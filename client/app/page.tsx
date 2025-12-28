@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 export function GlowingCard({ children, className = "" } :{ children: React.ReactNode; className? :string}) {
   return (
     // 1. 外側のラッパー（ここが虹色に光る）
-    <div className="relative group rounded-xl p-[2.5px] overflow-hidden ">
+    <div className="relative group rounded-xl p-[7.5px] overflow-hidden ">
       
       {/* 2. 虹色のグラデーション背景とぼかし（グロー効果） */}
       {/* absoluteで背後に配置し、ぼかし(blur)をかけることで発光を表現 */}
@@ -44,11 +44,13 @@ export default function Home() {
     <div className='flex min-h-screen flex-col items-center justify-center bg-slate-950 p-4'>
       <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">消える〇✖ゲーム</h1>
       <p>新しい部屋を作って友達を招待しよう！</p>
-      <GlowingCard>
-        <button onClick={createRoom}>
-          部屋を作る
-        </button>
-      </GlowingCard>
+      <div className="mt-6">
+        <GlowingCard >
+          <button onClick={createRoom}>
+            部屋を作る
+          </button>
+        </GlowingCard>
+      </div>
     </div>
   )
   

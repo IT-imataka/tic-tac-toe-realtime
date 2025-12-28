@@ -5,18 +5,17 @@ import { useSearchParams,useRouter } from 'next/navigation';
 import { io,Socket } from 'socket.io-client';
 import { GlowingCard } from '../page';
 
-// コンポーネントの外で定義する (再レンダリング対策の簡易版)
-let socket : Socket; 
+// 1. サーバー(localは3001番)に接続！
+const socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',{
+  autoConnect: false,
+});
 
 export default function Game() {  
-    // 1.生成されたランダム文字列から部屋番号の情報を受け取る
+    // 2.生成されたランダム文字列から部屋番号の情報を受け取る
+    const inviteURL = window.location.href;
+    console.log(inviteURL);
     const seachparam = useSearchParams();
-    const roomIDs = seachparam.get("room");
-  
-    // 2.部屋が存在すれば入室(socketが定義されているかも同時に判定)
-    if(roomIDs && socket){
-      socket.emit("join_room",roomIDs);
-    }
+    const roomID = seachparam.get("room");
 
     // 盤面の定義(9個の配列)
     const [board,setBoard] = useState<(string | null)[]>(Array(9).fill(null));
@@ -26,29 +25,31 @@ export default function Game() {
     const [nextInv,setNextInv] = useState<number[]>([]);
   
     useEffect(() => {
-  
-      // 3. サーバー(localは3001番)に接続！
-      const newsocket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
-      socket = newsocket;
-  
-      // 4. 盤面の更新が来たらStateを変更
-      // フロント側で勝敗の更新情報を受け取り勝者を表示させる
-      newsocket.on('update_board', (data) => {
-        // console.log(data);
-        // サーバーからwinner,boardというオブジェクトが届く
-        // console.log("サーバーから届いた生データ:", data);
-        setBoard(data.board);
-        setWinner(data.winner);
-        setNextInv(data.nextInv || []);
-      });
-    
-  
+      // 3.部屋が存在すれば入室(socketが定義されているかも同時に判定)
+      if(roomID && socket){
+        if(!socket.connected){
+          
+          console.log("サーバーに接続します",roomID);
+          socket.connect();
+          socket.emit("join_room",roomID);
+          // 4. 盤面の更新が来たらStateを変更
+          // フロント側で勝敗の更新情報を受け取り勝者を表示させる
+         socket.on('update_board', (data) => {
+          // console.log(data);
+          // サーバーからwinner,boardというオブジェクトが届く
+          // console.log("サーバーから届いた生データ:", data);
+          setBoard(data.board);
+          setWinner(data.winner);
+          setNextInv(data.nextInv || []);
+        });
+        }
+      }
       // 3. お片付け（画面を閉じた時などに切断）
       return () => {
-        newsocket.off("update_board");
-        newsocket.disconnect();
+        socket.off("update_board");
+        socket.disconnect();
       };
-    }, []); 
+    }, [roomID]); 
     // 空の依存配列で一度だけ実行
   
   // マスを押したときの処理
@@ -56,13 +57,16 @@ export default function Game() {
       // サーバにどのマス目に置きたいか
       // socketが存在するときだけ実行する
       if(socket){
-        socket.emit("place_mark", index)
+        socket.emit("place_mark", {
+          index:index,
+          roomID:roomID
+        })
       }
     };
-    const handleRiset = () => {
+    const handleReset = () => {
       console.log("リセットボタンが押されました");
       if(socket){
-        socket.emit("reset_board");
+        socket.emit("reset_board",roomID);
       }
     }
     
@@ -108,7 +112,13 @@ export default function Game() {
             </span>
           </h2>
           )}
-        <GlowingCard className='animate-pulse hover:animate-none'><button onClick={handleRiset} className="text-slate-300 transition">リセットボタン</button></GlowingCard>
+          {
+            inviteURL && (
+              <h2><a className='hover:underline hover:text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400' target='_blank' href={`${inviteURL}`}>{inviteURL}</a>&nbsp;を送ってね！</h2>
+            )
+          }
+        <button onClick={handleReset} className="mt-10 text-slate-300 transition">
+          <GlowingCard className='animate-pulse hover:animate-none'>リセットボタン</GlowingCard></button>
       </div>
     );
 }
