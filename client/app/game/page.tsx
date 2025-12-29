@@ -11,6 +11,7 @@ const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001", {
 });
 
 function GameCompornent() {
+  console.log("GameCompornentが動き出しました。");
   // 2.生成されたランダム文字列から部屋番号の情報を受け取る
   const seachparam = useSearchParams();
   const roomID = seachparam.get("room");
@@ -178,8 +179,11 @@ function GameCompornent() {
 export default function Game() {
   <Suspense
     fallback={
-      <div className="pt-8 bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
-        Now loading...
+      <div
+        style={{ color: "red", backgroundColor: "white", padding: "20px" }}
+        className="pt-8 bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
+      >
+        ロード中！！！
       </div>
     }
   >
