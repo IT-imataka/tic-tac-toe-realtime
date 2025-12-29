@@ -5,16 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { GlowingCard } from "../page";
 
-// function TestContent() {
-//   console.log("🔥 TestContent mounted!"); // これが出るか確認
-//   return (
-//     <div className="min-h-screen bg-white text-black flex items-center justify-center">
-//       <h1 className="text-4xl font-bold">Hello World!</h1>
-//     </div>
-//   );
-// }
-
-function GameCompornent() {
+export function GameContent() {
   console.log("GameCompornentが動き出しました。");
   // 2.生成されたランダム文字列から部屋番号の情報を受け取る
   const seachparam = useSearchParams();
@@ -188,17 +179,18 @@ function GameCompornent() {
 }
 
 export default function Game() {
-  <Suspense
-    fallback={
-      <div
-        style={{ color: "red", backgroundColor: "white", padding: "20px" }}
-        className="pt-8 bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
-      >
-        ロード中！！！
-      </div>
-    }
-  >
-    <GameCompornent />
-    {/* <TestContent /> */}
-  </Suspense>;
+  return (
+    <Suspense
+      fallback={
+        <div
+          style={{ color: "red", backgroundColor: "white", padding: "20px" }}
+          className="pt-8 bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
+        >
+          ロード中！！！
+        </div>
+      }
+    >
+      <GameContent />;
+    </Suspense>
+  );
 }
