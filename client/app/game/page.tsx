@@ -31,7 +31,7 @@ function GameCompornent() {
   );
   useEffect(() => {
     // 1. サーバー(localは3001番)に接続！
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       setInviteURL(window.location.href);
     }
     // 3.部屋が存在すれば入室(socketが定義されているかも同時に判定)
