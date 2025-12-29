@@ -12,8 +12,6 @@ const socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',{
 
 export default function Game() {  
     // 2.生成されたランダム文字列から部屋番号の情報を受け取る
-    const inviteURL = window.location.href;
-    console.log(inviteURL);
     const seachparam = useSearchParams();
     const roomID = seachparam.get("room");
 
@@ -22,9 +20,16 @@ export default function Game() {
     // 勝者の状態設定
     const [winner,setWinner] = useState<(string | null)>(null);
     // 消えるマスの状態設定
-    const [nextInv,setNextInv] = useState<number[]>([]);
+    const [isNext,setisNext] = useState<boolean>(true);
+    const [oMoves,setOMoves] = useState<number[]>([]);
+    const [xMoves,setXMoves] = useState<number[]>([]);
+    // 部屋毎の状態管理
+    const [inviteURL,setInviteURL] = useState<string>("");
   
     useEffect(() => {
+      if(typeof window !== undefined){
+        setInviteURL(window.location.href);
+      }
       // 3.部屋が存在すれば入室(socketが定義されているかも同時に判定)
       if(roomID && socket){
         if(!socket.connected){
@@ -35,12 +40,13 @@ export default function Game() {
           // 4. 盤面の更新が来たらStateを変更
           // フロント側で勝敗の更新情報を受け取り勝者を表示させる
          socket.on('update_board', (data) => {
-          // console.log(data);
           // サーバーからwinner,boardというオブジェクトが届く
           // console.log("サーバーから届いた生データ:", data);
           setBoard(data.board);
           setWinner(data.winner);
-          setNextInv(data.nextInv || []);
+          setOMoves(data.oMoves);
+          setXMoves(data.xMoves);
+          setisNext(data.isNext);
         });
         }
       }
@@ -78,21 +84,31 @@ export default function Game() {
         {/* グリッドの生成 */}
         <div className="grid grid-cols-3 gap-2 bg-white-500 p-2 rounded-l ">
           {board.map((cel,index) => {
-            const isNextInv = nextInv.includes(index);
+            // 消えるギミック判定のflagを立てる
+            let invisibleflag = false;
+            if(isNext){
+              // 各手番、最初に置かれた駒を判定
+              if(oMoves.length >= 3 && oMoves[0] === index){
+                invisibleflag = true;
+              }
+              if(xMoves.length >= 3 && xMoves[0] === index){
+                invisibleflag = true;
+              }
+            }
             // console.log("生のnextInv:", nextInv)
             // 以下はボタンを返すためのjsx
             return (  
               <div key={index} 
-              className={`relative p-[1px] rounded-xl overflow-hidden transition-all duration-500 ${isNextInv ? 'opacity-40 scale-95' : 'opacity-100'}`}>
+              className={`relative p-[1px] rounded-xl overflow-hidden transition-all duration-500 ${invisibleflag ? 'opacity-40 scale-95' : 'opacity-100'}`}>
                 <div className={`inset-0 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500
-                  ${isNextInv ? 'blur-[1]' : 'blur-[5] opacity-50'}`}>
+                  ${invisibleflag ? 'blur-[1]' : 'blur-[5] opacity-50'}`}>
                   <button
                   className={`
                      relative w-24 h-24 bg-slate-900 rounded-xl text-5xl font-bold flex items-center justify-center rounded-lg  transition-all duration-300 transform active:scale-95 transition-colors
                   
                      ${!cel && !winner ? 'hover:bg-slate-800' : ''}
                      ${!cel ? 'bg-black-700 hover:bg-black-600' : 'bg-white-600'}
-                     ${isNextInv ? 'opacity-30 border-2 border-dashed border-red-400' : 'opacity-100'}
+                     ${invisibleflag ? 'opacity-30 border-2 border-dashed border-red-400' : 'opacity-100'}
                     `}
                   key={index}
                   onClick={() => handlcelClick(index)}>

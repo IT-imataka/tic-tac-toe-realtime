@@ -41,6 +41,8 @@ const io = new Server(server, {
 // let xMoves: number[] = [];
 // let oMoves: number[] = [];
 
+// app/page.tsx
+
 io.on("connection", (socket) => {
   console.log("✅ユーザーが接続", socket.id);
   // ユーザー接続時に部屋に通す玄関口の設定
@@ -68,6 +70,8 @@ io.on("connection", (socket) => {
       winner: room.winner,
     });
 
+    // game/page.tsx
+
     // クライアントからの置きたいマス目の指示を受け取る
     socket.on("place_mark", (data: { index: number; roomID: string }) => {
       // 分割代入
@@ -76,7 +80,9 @@ io.on("connection", (socket) => {
       // 部屋の有無の判定　あれば早期リターン　なければ作成
       const room = rooms[roomID];
       if (!room) return;
-      // すでに勝者がいる場合や盤面が埋まっている場合の判定は削除済
+
+      // すでに勝者がいる場合や盤面が埋まっている場合の判定
+      if (room.winner || room.board[index]) return;
 
       // ターン、プレイヤー判定は下記のように修正
       const currentPlayer = room.isNext ? "○" : "×";
@@ -157,7 +163,9 @@ io.on("connection", (socket) => {
       io.to(roomID).emit("update_board", {
         board: room.board,
         winner: room.winner,
-        nextInv,
+        oMoves: room.oMoves,
+        xMoves: room.xMoves,
+        isNext: room.isNext,
       });
     });
     socket.on("reset_board", (roomID: string) => {
@@ -174,12 +182,14 @@ io.on("connection", (socket) => {
         room.xMoves = [];
         room.oMoves = [];
 
-        console.log("送出データ:", { nextInv: room.isNext });
+        console.log("送出データ:", { isNext: room.isNext });
         // 最後に全員に通知
         io.to(roomID).emit("update_board", {
           board: room.board,
           winner: room.winner,
-          nextInv: room.isNext,
+          isNext: room.isNext,
+          oMoves: room.oMoves,
+          xMoves: room.xMoves,
         });
       } else {
         console.log(
