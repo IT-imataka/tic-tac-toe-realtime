@@ -5,12 +5,10 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { GlowingCard } from "../page";
 
-export function GameContent() {
-  console.log("GameCompornentが動き出しました。");
+function GameContent() {
   // 2.生成されたランダム文字列から部屋番号の情報を受け取る
   const seachparam = useSearchParams();
   const roomID = seachparam.get("room");
-  console.log("現在のroomID:", roomID);
 
   // 盤面の定義(9個の配列)
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
@@ -37,12 +35,14 @@ export function GameContent() {
     // 3.部屋が存在すれば入室(socketが定義されているかも同時に判定)
     if (roomID && socket) {
       if (!socket.connected) {
+        console.log("🔗 接続先URL:", socket.io.uri);
         console.log("サーバーに接続します", roomID);
         socket.connect();
         socket.emit("join_room", roomID);
         // 4. 盤面の更新が来たらStateを変更
         // フロント側で勝敗の更新情報を受け取り勝者を表示させる
         socket.on("update_board", (data) => {
+          console.log("📨 サーバーから受信:", data);
           // サーバーからwinner,boardというオブジェクトが届く
           // console.log("サーバーから届いた生データ:", data);
           setBoard(data.board);
@@ -59,13 +59,14 @@ export function GameContent() {
       socket.disconnect();
     };
   }, [roomID]);
-  // 空の依存配列で一度だけ実行
 
   // マスを押したときの処理
   const handlcelClick = (index: number) => {
     // サーバにどのマス目に置きたいか
     // socketが存在するときだけ実行する
+    console.log(socket);
     if (socket) {
+      console.log(socket);
       socket.emit("place_mark", {
         index: index,
         roomID: roomID,
@@ -103,31 +104,25 @@ export function GameContent() {
           // console.log("生のnextInv:", nextInv)
           // 以下はボタンを返すためのjsx
           return (
-            <div
-              key={index}
-              className={`relative p-[1px] rounded-xl overflow-hidden transition-all duration-500 ${
-                invisibleflag ? "opacity-40 scale-95" : "opacity-100"
-              }`}
+            <div key={index} className={`relative p-[1px] rounded-xl overflow-hidden transition-all duration-500 ${invisibleflag ? "opacity-40 scale-95" : "opacity-100"}`}
             >
               <div
                 className={`inset-0 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500
-                    ${invisibleflag ? "blur-[1]" : "blur-[5] opacity-50"}`}
+                ${invisibleflag ? "blur-[1]" : "blur-[5] opacity-50"}`}
               >
                 <button
                   className={`
-                       relative w-24 h-24 bg-slate-900 rounded-xl text-5xl font-bold flex items-center justify-center rounded-lg  transition-all duration-300 transform active:scale-95 transition-colors
+                    relative w-24 h-24 bg-slate-900 rounded-xl text-5xl font-bold flex items-center justify-center rounded-lg  transition-all duration-300 transform active:scale-95 transition-colors
 
-                       ${!cel && !winner ? "hover:bg-slate-800" : ""}
-                       ${
-                         !cel
-                           ? "bg-black-700 hover:bg-black-600"
-                           : "bg-white-600"
-                       }
-                       ${
-                         invisibleflag
-                           ? "opacity-30 border-2 border-dashed border-red-400"
-                           : "opacity-100"
-                       }
+                    ${!cel && !winner ? "hover:bg-slate-800" : ""}
+                    ${!cel
+                      ? "bg-black-700 hover:bg-black-600"
+                      : "bg-white-600"
+                    }
+                    ${invisibleflag
+                      ? "opacity-30 border-2 border-dashed border-red-400"
+                      : "opacity-100"
+                    }
                       `}
                   key={index}
                   onClick={() => handlcelClick(index)}
