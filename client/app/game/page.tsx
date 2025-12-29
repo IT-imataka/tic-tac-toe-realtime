@@ -5,6 +5,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { GlowingCard } from "../page";
 
+const socket = io(
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
+  {
+    autoConnect: false,
+  }
+);
+
 function GameContent() {
   // 2.生成されたランダム文字列から部屋番号の情報を受け取る
   const seachparam = useSearchParams();
@@ -21,12 +28,7 @@ function GameContent() {
   // 部屋毎の状態管理
   const [inviteURL, setInviteURL] = useState("");
 
-  const socket = io(
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
-    {
-      autoConnect: false,
-    }
-  );
+
   useEffect(() => {
     // 1. サーバー(localは3001番)に接続！
     if (typeof window !== "undefined") {

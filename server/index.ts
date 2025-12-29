@@ -209,3 +209,4 @@ const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`🚀 サーバー起動中: http://localhost:${PORT}`);
 });
+// Render更新用のコメント（これ追加して保存！）
