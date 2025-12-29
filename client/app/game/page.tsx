@@ -35,7 +35,7 @@ function GameContent() {
     // 3.部屋が存在すれば入室(socketが定義されているかも同時に判定)
     if (roomID && socket) {
       if (!socket.connected) {
-        console.log("🔗 接続先URL:", socket.io.uri);
+        console.log("🔗 接続先URL:", (socket.io as any).uri);
         console.log("サーバーに接続します", roomID);
         socket.connect();
         socket.emit("join_room", roomID);
