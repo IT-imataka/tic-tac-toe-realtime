@@ -23,14 +23,14 @@ function GameCompornent() {
   // 部屋毎の状態管理
   const [inviteURL, setInviteURL] = useState<string>("");
 
+  const socket = io(
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
+    {
+      autoConnect: false,
+    }
+  );
   useEffect(() => {
     // 1. サーバー(localは3001番)に接続！
-    const socket = io(
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
-      {
-        autoConnect: false,
-      }
-    );
     if (typeof window !== undefined) {
       setInviteURL(window.location.href);
     }
