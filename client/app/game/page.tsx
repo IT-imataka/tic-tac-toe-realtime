@@ -14,6 +14,7 @@ function GameCompornent() {
   // 2.生成されたランダム文字列から部屋番号の情報を受け取る
   const seachparam = useSearchParams();
   const roomID = seachparam.get("room");
+  console.log("現在のroomID:", roomID);
 
   // 盤面の定義(9個の配列)
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
