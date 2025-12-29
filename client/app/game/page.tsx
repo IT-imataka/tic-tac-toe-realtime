@@ -5,11 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { GlowingCard } from "../page";
 
-// 1. サーバー(localは3001番)に接続！
-const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001", {
-  autoConnect: false,
-});
-
 function GameCompornent() {
   console.log("GameCompornentが動き出しました。");
   // 2.生成されたランダム文字列から部屋番号の情報を受け取る
@@ -29,6 +24,13 @@ function GameCompornent() {
   const [inviteURL, setInviteURL] = useState<string>("");
 
   useEffect(() => {
+    // 1. サーバー(localは3001番)に接続！
+    const socket = io(
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
+      {
+        autoConnect: false,
+      }
+    );
     if (typeof window !== undefined) {
       setInviteURL(window.location.href);
     }

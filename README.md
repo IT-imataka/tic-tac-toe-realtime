@@ -8,7 +8,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black)
 
 ![license](https://img.shields.io/badge/TypeScript-5-blue)
 
