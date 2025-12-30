@@ -4,16 +4,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
 // 虹色のカードコンポーネント
-export function GlowingCard({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+export function GlowingCard({ children, className = "", }: { children: React.ReactNode; className?: string; }) {
   return (
     // 1. 外側のラッパー（ここが虹色に光る）
     <div className="relative group rounded-xl p-[7.5px] overflow-hidden ">
@@ -34,6 +28,13 @@ export function GlowingCard({
     </div>
   );
 }
+export function roomBtn({ children, className = "" }: { children: React.ReactNode; className: string }) {
+  return (
+    <button className="transition-transform active:scale-95">
+
+    </button>
+  )
+}
 
 export default function Home() {
   // Hooksは全て一番上に宣言する
@@ -44,7 +45,9 @@ export default function Home() {
   // room作成ボタンの状態定義
   const [btntxt, setBtntxt] = useState<string>("へやを作る");
 
-  const newRoomid = Math.random().toString(36).slice(-10);
+  const [newRoomid] = useState<string>(Math.random().toString(36).slice(-10));
+
+  // const newRoomid = Math.random().toString(36).slice(-10);
 
   const createURL = () => {
     navigator.clipboard.writeText(window.location.href + `/game?room=${newRoomid}`);
