@@ -4,18 +4,10 @@ import { Server } from "socket.io";
 import cors from "cors";
 
 const app = express();
+app.get("/", (req, res) => {
+  res.send("Server is running.");
+});
 app.use(cors());
-
-// 複数の同時接続を可能にするインターフェイスを定義
-interface roomData {
-  board: (string | null)[];
-  isNext: boolean;
-  winner: string | null;
-  xMoves: number[];
-  oMoves: number[];
-}
-// 部屋の台帳を作成
-const rooms: Record<string, roomData> = {};
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -27,6 +19,17 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+// 複数の同時接続を可能にするインターフェイスを定義
+interface roomData {
+  board: (string | null)[];
+  isNext: boolean;
+  winner: string | null;
+  xMoves: number[];
+  oMoves: number[];
+}
+// 部屋の台帳を作成
+const rooms: Record<string, roomData> = {};
 
 // ゲームの状態を定義(9つ)
 // null = なし,'〇' = まる,'×' = ばつ
