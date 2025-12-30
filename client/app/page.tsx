@@ -4,6 +4,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 // 虹色のカードコンポーネント
 export function GlowingCard({
@@ -26,7 +27,7 @@ export function GlowingCard({
       {/* 3. 実際のコンテンツが入るカード（内側） */}
       {/* 親要素のp-[1px]の分だけ内側に配置され、縁取りに見える */}
       <div
-        className={`relative h-full w-full bg-gray-900 rounded-xl p-6 ${className}`}
+        className={`relative h-full w-full bg-gray-900 rounded-xl p-4.5 ${className}`}
       >
         {children}
       </div>
@@ -37,11 +38,19 @@ export function GlowingCard({
 export default function Home() {
   // Hooksは全て一番上に宣言する
   // 条件分岐、ループ、任意の関数内、returnの後、イベントハンドラ、クラスコンポーネント内で宣言しない
+  // Hooksはコンポーネントの中でしか動かないためグローバルな場所に書かない
   const router = useRouter();
 
-  // Hooksはコンポーネントの中でしか動かないためグローバルな場所に書かない
+  // room作成ボタンの状態定義
+  const [btntxt, setBtntxt] = useState<string>("へやを作る");
+
+  const newRoomid = Math.random().toString(36).slice(-10);
+
+  const createURL = () => {
+    navigator.clipboard.writeText(window.location.href + `/game?room=${newRoomid}`);
+    setBtntxt("コピーしました！");
+  };
   const createRoom = () => {
-    const newRoomid = Math.random().toString(36).slice(-10);
     router.push(`/game?room=${newRoomid}`);
   };
 
@@ -51,11 +60,14 @@ export default function Home() {
         消える〇✖ゲーム
       </h1>
       <p>新しい部屋を作って友達を招待しよう！</p>
-      <div className="mt-6">
+      <div className="mt-6 flex max-w-full gap-x-3 scale-z-20">
         <GlowingCard>
-          <button onClick={createRoom}>部屋を作る</button>
+          <button className="transition-transform active:scale-95" onClick={createURL}>{btntxt}<br />Create</button>
+        </GlowingCard>
+        <GlowingCard>
+          <button className="transition-transform active:scale-95" onClick={createRoom}>部屋に入る<br />In</button>
         </GlowingCard>
       </div>
-    </div>
+    </div >
   );
 }

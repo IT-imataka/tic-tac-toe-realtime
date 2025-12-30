@@ -154,6 +154,11 @@ function GameContent() {
           </span>
         </h2>
       )}
+      <button onClick={handleReset} className="mt-10 text-slate-300 transition">
+        <GlowingCard className="animate-pulse hover:animate-none">
+          リセットボタン
+        </GlowingCard>
+      </button>
       {inviteURL && (
         <h2>
           <a
@@ -166,11 +171,6 @@ function GameContent() {
           &nbsp;を送ってね！
         </h2>
       )}
-      <button onClick={handleReset} className="mt-10 text-slate-300 transition">
-        <GlowingCard className="animate-pulse hover:animate-none">
-          リセットボタン
-        </GlowingCard>
-      </button>
     </div>
   );
 }
