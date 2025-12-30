@@ -154,13 +154,13 @@ function GameContent() {
           </span>
         </h2>
       )}
-      <button onClick={handleReset} className="mt-10 text-slate-300 transition">
+      <button onClick={handleReset} className="mt-4 text-slate-300 transition">
         <GlowingCard className="animate-pulse hover:animate-none">
           リセットボタン
         </GlowingCard>
       </button>
       {inviteURL && (
-        <h2>
+        <h2 className="mt-6">
           <a
             className="hover:underline hover:text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
             target="_blank"

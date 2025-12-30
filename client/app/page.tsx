@@ -28,11 +28,11 @@ export function GlowingCard({ children, className = "", }: { children: React.Rea
     </div>
   );
 }
-export function roomBtn({ children, className = "" }: { children: React.ReactNode; className: string }) {
-  return (
-    <button className="transition-transform active:scale-95">
 
-    </button>
+// ボタンのコンポーネント
+export function RoomBtn({ children, className = "", onClick = () => { }, }: { children: React.ReactNode; className?: string; onClick?: () => void; }) {
+  return (
+    <button className="transition-transform active:scale-95" onClick={onClick}> {children}</button >
   )
 }
 
@@ -45,8 +45,10 @@ export default function Home() {
   // room作成ボタンの状態定義
   const [btntxt, setBtntxt] = useState<string>("へやを作る");
 
+  // roomidの状態定義
   const [newRoomid] = useState<string>(Math.random().toString(36).slice(-10));
 
+  // 下記の場合再レンダリング時に再生成されてしまう
   // const newRoomid = Math.random().toString(36).slice(-10);
 
   const createURL = () => {
@@ -65,10 +67,10 @@ export default function Home() {
       <p>新しい部屋を作って友達を招待しよう！</p>
       <div className="mt-6 flex max-w-full gap-x-3 scale-z-20">
         <GlowingCard>
-          <button className="transition-transform active:scale-95" onClick={createURL}>{btntxt}<br />Create</button>
+          <RoomBtn onClick={createURL}>{btntxt}<br />Create</RoomBtn>
         </GlowingCard>
         <GlowingCard>
-          <button className="transition-transform active:scale-95" onClick={createRoom}>部屋に入る<br />In</button>
+          <RoomBtn onClick={createRoom}>部屋に入る<br />In</RoomBtn>
         </GlowingCard>
       </div>
     </div >
