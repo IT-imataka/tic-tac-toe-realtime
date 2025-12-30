@@ -187,7 +187,7 @@ export default function Game() {
         </div>
       }
     >
-      <GameContent />;
+      <GameContent />
     </Suspense>
   );
 }
