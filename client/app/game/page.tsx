@@ -88,7 +88,7 @@ function GameContent() {
       <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
         消える〇✖ゲーム
       </h1>
-      <p className="pt text-white-600 pb-4">交互に配置されます</p>
+      <p className="pt text-white pb-4">交互に配置されます</p>
       {/* グリッドの生成 */}
       <div className="grid grid-cols-3 gap-2 bg-white-500 p-2 rounded-l ">
         {board.map((cel, index) => {
@@ -181,7 +181,7 @@ export default function Game() {
       fallback={
         <div
           style={{ color: "red", backgroundColor: "white", padding: "20px" }}
-          className="pt-8 bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
+          className="flex place-items-center pt-8 bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
         >
           ロード中！！！
         </div>

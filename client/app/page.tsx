@@ -32,7 +32,7 @@ export function GlowingCard({ children, className = "", }: { children: React.Rea
 // ボタンのコンポーネント
 export function RoomBtn({ children, className = "", onClick = () => { }, }: { children: React.ReactNode; className?: string; onClick?: () => void; }) {
   return (
-    <button className="transition-transform active:scale-95" onClick={onClick}> {children}</button >
+    <button className="text-white transition-transform active:scale-95" onClick={onClick}> {children}</button >
   )
 }
 
