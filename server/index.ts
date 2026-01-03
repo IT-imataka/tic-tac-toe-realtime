@@ -27,6 +27,7 @@ interface roomData {
   winner: string | null;
   xMoves: number[];
   oMoves: number[];
+  turn: string | null;
 }
 // 部屋の台帳を作成
 const rooms: Record<string, roomData> = {};
@@ -63,6 +64,7 @@ io.on("connection", (socket) => {
         winner: null,
         xMoves: [],
         oMoves: [],
+        turn: null,
       };
     }
 
@@ -71,6 +73,7 @@ io.on("connection", (socket) => {
     socket.emit("update_board", {
       board: room.board,
       winner: room.winner,
+      myturn: room.turn,
     });
 
     // game/page.tsx
@@ -151,6 +154,8 @@ io.on("connection", (socket) => {
       }
       // ターン交代
       room.isNext = !room.isNext;
+      // console.log(room.isNext);
+      room.turn = currentPlayer;
       const nextInv: number[] = [];
 
       // 転送する前にサーバーの変数を更新する
@@ -169,6 +174,7 @@ io.on("connection", (socket) => {
         oMoves: room.oMoves,
         xMoves: room.xMoves,
         isNext: room.isNext,
+        turn: room.turn,
       });
     });
     socket.on("reset_board", (roomID: string) => {
@@ -193,6 +199,7 @@ io.on("connection", (socket) => {
           isNext: room.isNext,
           oMoves: room.oMoves,
           xMoves: room.xMoves,
+          turn: room.turn,
         });
       } else {
         console.log(

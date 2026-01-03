@@ -25,11 +25,15 @@ function GameContent() {
   const [isNext, setisNext] = useState<boolean>(true);
   const [oMoves, setOMoves] = useState<number[]>([]);
   const [xMoves, setXMoves] = useState<number[]>([]);
+  // 手番の状態を定義
+  const [myturn, setMyturn] = useState<string | null>("○");
+
   // 部屋毎の状態管理
   const [inviteURL, setInviteURL] = useState("");
 
 
   useEffect(() => {
+    console.log(myturn);
     // 1. サーバー(localは3001番)に接続！
     if (typeof window !== "undefined") {
       setInviteURL(window.location.href);
@@ -52,6 +56,7 @@ function GameContent() {
           setOMoves(data.oMoves);
           setXMoves(data.xMoves);
           setisNext(data.isNext);
+          setMyturn(data.turn);
         });
       }
     }
@@ -66,9 +71,13 @@ function GameContent() {
   const handlcelClick = (index: number) => {
     // サーバにどのマス目に置きたいか
     // socketが存在するときだけ実行する
-    console.log(socket);
     if (socket) {
-      console.log(socket);
+      // const currentTurn = isNext ? "×" : "○";
+      // // console.log(myturn);
+      // // if (currentTurn !== myturn) {
+      // //   return;
+      // // }
+
       socket.emit("place_mark", {
         index: index,
         roomID: roomID,
@@ -85,10 +94,16 @@ function GameContent() {
   return (
     // 以下はページ全てを返すjsx
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 p-4">
-      <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+      <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">
         消える〇✖ゲーム
       </h1>
       <p className="pt text-white pb-4">交互に配置されます</p>
+      <div className="backdrop-blur-md">
+        {myturn === "○"
+          ?
+          <h2 className="pb-4 text-2xl text-cyan-300 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">○の番です!</h2>
+          : <h2 className="pb-4 text-2xl text-pink-500 drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]">×の番です!</h2>}
+      </div>
       {/* グリッドの生成 */}
       <div className="grid grid-cols-3 gap-2 bg-white-500 p-2 rounded-l ">
         {board.map((cel, index) => {
