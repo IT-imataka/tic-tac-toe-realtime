@@ -26,14 +26,13 @@ function GameContent() {
   const [oMoves, setOMoves] = useState<number[]>([]);
   const [xMoves, setXMoves] = useState<number[]>([]);
   // 手番の状態を定義
-  const [myturn, setMyturn] = useState<string | null>("○");
+  // const [myturn, setMyturn] = useState<string | null>("○");
 
   // 部屋毎の状態管理
   const [inviteURL, setInviteURL] = useState("");
 
 
   useEffect(() => {
-    console.log(myturn);
     // 1. サーバー(localは3001番)に接続！
     if (typeof window !== "undefined") {
       setInviteURL(window.location.href);
@@ -56,7 +55,7 @@ function GameContent() {
           setOMoves(data.oMoves);
           setXMoves(data.xMoves);
           setisNext(data.isNext);
-          setMyturn(data.turn);
+          // setMyturn(data.turn);
         });
       }
     }
@@ -72,12 +71,6 @@ function GameContent() {
     // サーバにどのマス目に置きたいか
     // socketが存在するときだけ実行する
     if (socket) {
-      // const currentTurn = isNext ? "×" : "○";
-      // // console.log(myturn);
-      // // if (currentTurn !== myturn) {
-      // //   return;
-      // // }
-
       socket.emit("place_mark", {
         index: index,
         roomID: roomID,
@@ -99,7 +92,7 @@ function GameContent() {
       </h1>
       <p className="pt text-white pb-4">交互に配置されます</p>
       <div className="backdrop-blur-md">
-        {myturn === "○"
+        {isNext
           ?
           <h2 className="pb-4 text-2xl text-cyan-300 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">○の番です!</h2>
           : <h2 className="pb-4 text-2xl text-pink-500 drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]">×の番です!</h2>}
