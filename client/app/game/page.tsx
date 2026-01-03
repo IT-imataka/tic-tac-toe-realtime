@@ -26,7 +26,7 @@ function GameContent() {
   const [oMoves, setOMoves] = useState<number[]>([]);
   const [xMoves, setXMoves] = useState<number[]>([]);
   // 手番の状態を定義
-  // const [myturn, setMyturn] = useState<string | null>("○");
+  // const [myturn, setMyturn] = useState<string>("○の番です");
 
   // 部屋毎の状態管理
   const [inviteURL, setInviteURL] = useState("");
@@ -91,12 +91,13 @@ function GameContent() {
         消える〇✖ゲーム
       </h1>
       <p className="pt text-white pb-4">交互に配置されます</p>
-      <div className="backdrop-blur-md">
+      {/* <div className="backdrop-blur-md">
+        <h2 className="pb-4 text-2xl text-cyan-300 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">{myturn}</h2>
         {isNext
           ?
-          <h2 className="pb-4 text-2xl text-cyan-300 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">○の番です!</h2>
+          <h2 className="pb-4 text-2xl text-cyan-300 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">{myturn}</h2>
           : <h2 className="pb-4 text-2xl text-pink-500 drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]">×の番です!</h2>}
-      </div>
+      </div> */}
       {/* グリッドの生成 */}
       <div className="grid grid-cols-3 gap-2 bg-white-500 p-2 rounded-l ">
         {board.map((cel, index) => {
