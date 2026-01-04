@@ -103,12 +103,12 @@ function GameContent() {
         {board.map((cel, index) => {
           // 消えるギミック判定のflagを立てる
           let invisibleflag = false;
-          if (isNext) {
+          if (!winner) {
             // 各手番、最初に置かれた駒を判定
-            if (oMoves.length >= 3 && oMoves[0] === index) {
+            if (oMoves?.length >= 3 && oMoves[0] === index) {
               invisibleflag = true;
             }
-            if (xMoves.length >= 3 && xMoves[0] === index) {
+            if (xMoves?.length >= 3 && xMoves[0] === index) {
               invisibleflag = true;
             }
           }
