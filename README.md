@@ -18,7 +18,7 @@
 
 **実際に遊べます！！下記をクリックしてください**👇
 
-[https://tic-tac-toe-client-brp5.onrender.com](https://tic-tac-toe-client-brp5.onrender.com/)
+[tic-tac-toe-realtime-eight.vercel.app](tic-tac-toe-realtime-eight.vercel.app/)
 
 ※ PC,スマホ、ブラウザでも別タブ同士で対戦が可能です
 
@@ -43,7 +43,7 @@ Youtube shortsで見かけた「時間が経つと自動で消える〇×ゲー�
 - **Frontend**：Next.js,  TypeScript,  Tailwind css
 - **Backend** ：Express.js,Node.js
 - **Realtime**：Socket.io(双方向通信)
-- **Deployment**：Render.com
+- **Deployment**：client：Vercel,server：koyeb
 
 ## 🚪 開発環境のセットアップ  (Local Setup)
 
@@ -114,7 +114,7 @@ $ npm run dev
 
 **Play it now!! Click below**👇
 
-[https://tic-tac-toe-client-brp5.onrender.com](https://tic-tac-toe-client-brp5.onrender.com/)
+[tic-tac-toe-realtime-eight.vercel.app](tic-tac-toe-realtime-eight.vercel.app/)
 
 ※ You can play against others on PC, smartphone, or browser using separate tabs
 
@@ -138,7 +138,7 @@ By adding a disappearing element to classic Tic-Tac-Toe, it incorporates psychol
 - **Frontend**: Next.js, TypeScript, Tailwind CSS
 - **Backend**: Express.js, Node.js
 - **Realtime**: Socket.io (bidirectional communication)
-- **Deployment**: Render.com
+- **Deployment**: client：Vercel,server：koyeb
 
 ## 🚪 Local Setup
 
