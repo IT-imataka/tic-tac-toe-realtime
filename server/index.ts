@@ -14,7 +14,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://tic-tac-toe-client-brp5.onrender.com",
+      "https://tic-tac-toe-realtime-eight.vercel.app",
     ],
     methods: ["GET", "POST"],
   },
@@ -203,7 +203,7 @@ io.on("connection", (socket) => {
         });
       } else {
         console.log(
-          `リセットできませんでした。部屋：${room}が見つかりません。`
+          `リセットできませんでした。部屋：${room}が見つかりません。`,
         );
       }
     });
