@@ -20,6 +20,9 @@
 
 [https://tic-tac-toe-realtime-eight.vercel.app](https://tic-tac-toe-realtime-eight.vercel.app/)
 
+**Render.comというPaaSのサーバーが起動に時間がかかるため、初回起動時は、しばらく待つとコマが表示されます。
+ご了承ください。**
+
 ※ PC,スマホ、ブラウザでも別タブ同士で対戦が可能です
 
 ## 📷 スクリーンショット
